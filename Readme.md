@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Анна Войль](https://up.htmlacademy.ru/javascript/11/user/103417).
-* Наставник: `Неизвестно`.
+* Наставник: `Роман Чаругин`.
 
 ---
 
