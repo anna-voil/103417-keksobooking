@@ -98,45 +98,28 @@ displayAdvertsOnMap(adverts);
 var typesDictionary = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
 
 function displayOneAdvertOnMap(advert) {
-  // var template = document.querySelector('template').content.querySelector('article.map__card'); // находим и передаем в переменную элемент шаблона из html
-  // var mapCard = template.cloneNode(true); // копируем переменную template, чтобы не изменялся исходный шаблон (true указывает на копирование дочерних эл-тов)
-  // mapCard = document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
-
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
 
-  // переписываем закомментированные строки добавления шаблона в документ + см. последнюю строку ф-ии
   var mapCard = templateContent.querySelector('article.map__card').cloneNode(true); // достаем mapCard из templateContent и клонируем вместе с содержимым
 
-  mapCard.querySelector('h3').textContent = advert.offer.title; // в templateContent находим элемент h3 и помещаем в него title
-
   // далее помещаем данные в шаблон контент template:
+  mapCard.querySelector('h3').textContent = advert.offer.title; // в templateContent находим элемент h3 и помещаем в него title
   mapCard.querySelector('p small').textContent = advert.offer.address;
-
   mapCard.querySelector('.popup__price').innerHTML = advert.offer.price + ' &#x20bd;/ночь'; // textContent не используем тк не отображает символ рубля
-
   mapCard.querySelector('h4').textContent = typesDictionary[advert.offer.type]; // обращаемся к св-ву словаря через [], чтобы вывести альтернативное название типа жилья
-
   mapCard.querySelectorAll('p')[2].textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей'; // находим <p> по порядковому номеру
-
   mapCard.querySelectorAll('p')[3].textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
-
-  // mapCard.querySelector('popup__features').
-
   mapCard.querySelectorAll('p')[4].textContent = advert.offer.description;
-
   mapCard.querySelector('.popup__avatar').src = advert.author.avatar;
 
-  mapCard = document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
+  mapCard.querySelector('ul.popup__features').innerHTML = ''; // обращаемся к содержимому ul и удаляем, присвоив пустую строку
+  for (var i = 0; i < advert.offer.features.length; i++) {
+    var feature = advert.offer.features[i];
+    var featureLi = document.createElement('li'); // создаем элемент li
+    featureLi.classList.add('feature', 'feature--' + feature); // добавляем созданному элементу нужный класс
+    mapCard.querySelector('ul').appendChild(featureLi); // добавляем созданный элемент в список
+  }
 
+  mapCard = document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
 }
 displayOneAdvertOnMap(adverts[0]);
-
-
-/* eslint-disable */
-/*
-
-               В список .popup__features выведите все доступные удобства в квартире из массива {{offer.features}} пустыми элементами списка (<li>) с классом feature feature--{{название удобства}}
-
-
-*/
-/* eslint-enable */
