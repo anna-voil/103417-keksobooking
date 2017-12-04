@@ -48,7 +48,7 @@ function generateObjects(num) { // определённое кол-во раз �
 
     var advert = {
       author: {
-        avatar: 'img/avatars/user' + '0' + (i + 1) + '.png'
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
 
       offer: {
