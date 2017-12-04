@@ -1,18 +1,17 @@
 'use strict';
-var avatars = ['01', '02', '03', '04', '05', '06', '07', '08'];
-var titles = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var houseType = ['flat', 'house', 'bungalo'];
-var checkIn = ['12:00', '13:00', '14:00'];
-var checkOut = ['12:00', '13:00', '14:00'];
+var AVATARS = ['01', '02', '03', '04', '05', '06', '07', '08'];
+var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var HOUSE_TYPE = ['flat', 'house', 'bungalo'];
+var CHECK_IN = ['12:00', '13:00', '14:00'];
+var CHECK_OUT = ['12:00', '13:00', '14:00'];
 
 
 // возвращает случайное число элементов массива
-function getRandomElements(arr) {
+function getRandomElements(arr, count) {
   var arrCopy = arr.slice(); // создаем копию, чтобы не удалить элементы из оригинального массива
   var randomElements = []; // hotelFeatures
-  var randomElementsCount = getRandomNum(0, arrCopy.length); // определяем число взятых из массива эл-тов
-  for (var i = 0; i < randomElementsCount; i++) {
+  for (var i = 0; i < count; i++) {
     randomElements.push(getAndRemoveElement(arrCopy)); // добавляем циклом нужное кол-во элементов массива arr
   }
   return randomElements;
@@ -50,19 +49,19 @@ function generateObjects(num) { // определённое кол-во раз �
 
     var advert = {
       author: {
-        avatar: 'img/avatars/user' + getAndRemoveElement(avatars) + '.png'
+        avatar: 'img/avatars/user' + '0' + (i + 1) + '.png'
       },
 
       offer: {
-        title: getRandomElement(titles),
+        title: getRandomElement(TITLES),
         address: coords.x + ', ' + coords.y,
         price: getRandomNum(1000, 1000000),
-        type: getRandomElement(houseType),
+        type: getRandomElement(HOUSE_TYPE),
         rooms: getRandomNum(1, 5),
         guests: getRandomNum(1, 15),
-        checkin: getRandomElement(checkIn),
-        checkout: getRandomElement(checkOut),
-        features: getRandomElements(features),
+        checkin: getRandomElement(CHECK_IN),
+        checkout: getRandomElement(CHECK_OUT),
+        features: getRandomElements(FEATURES, getRandomNum(0, FEATURES.length)),
         description: '',
         photos: []
       },
@@ -78,16 +77,19 @@ function generateObjects(num) { // определённое кол-во раз �
 document.querySelector('.map').classList.remove('map--faded');
 
 // функция показывает дом-элементы на карте
+function createPinElement(advert) {
+  var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
+  newElement.className = 'map__pin'; // задаем класс элемента
+  newElement.style = 'left:' + (advert.location.x - 20) + 'px; top:' + (advert.location.y - 50) + 'px;';
+  newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
+  return newElement;
+}
 function displayAdvertsOnMap(arr) {
   var fragment = document.createDocumentFragment();
-
   for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
     var advert = arr[i];
-    var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
-    newElement.className = 'map__pin'; // задаем класс элемента
-    newElement.style = 'left:' + (advert.location.x - 20) + 'px; top:' + (advert.location.y - 50) + 'px;';
+    var newElement = createPinElement(advert);
     fragment.appendChild(newElement); // добавляем элемент в var fragment
-    newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
   }
   var mapPins = document.querySelector('.map__pins'); // находим элемент с классом map__pins
   mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
@@ -95,7 +97,7 @@ function displayAdvertsOnMap(arr) {
 
 displayAdvertsOnMap(adverts);
 
-var typesDictionary = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
+var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
 
 function displayOneAdvertOnMap(advert) {
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
@@ -106,7 +108,7 @@ function displayOneAdvertOnMap(advert) {
   mapCard.querySelector('h3').textContent = advert.offer.title; // в templateContent находим элемент h3 и помещаем в него title
   mapCard.querySelector('p small').textContent = advert.offer.address;
   mapCard.querySelector('.popup__price').innerHTML = advert.offer.price + ' &#x20bd;/ночь'; // textContent не используем тк не отображает символ рубля
-  mapCard.querySelector('h4').textContent = typesDictionary[advert.offer.type]; // обращаемся к св-ву словаря через [], чтобы вывести альтернативное название типа жилья
+  mapCard.querySelector('h4').textContent = TYPES_DICTIONARY[advert.offer.type]; // обращаемся к св-ву словаря через [], чтобы вывести альтернативное название типа жилья
   mapCard.querySelectorAll('p')[2].textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей'; // находим <p> по порядковому номеру
   mapCard.querySelectorAll('p')[3].textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
   mapCard.querySelectorAll('p')[4].textContent = advert.offer.description;
