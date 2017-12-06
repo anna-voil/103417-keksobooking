@@ -72,17 +72,35 @@ function generateObjects(num) { // определённое кол-во раз �
   return result;
 }
 
-// удаляем класс .map--faded из элемента .map
-document.querySelector('.map').classList.remove('map--faded');
-
 // функция показывает дом-элементы на карте
 function createPinElement(advert) {
   var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
   newElement.className = 'map__pin'; // задаем класс элемента
   newElement.style = 'left:' + (advert.location.x - 20) + 'px; top:' + (advert.location.y - 50) + 'px;';
   newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
+
+  function onSelectPin() {
+    var activePin = document.querySelector('.map__pin--active');
+    if (activePin) {
+      activePin.classList.remove('map__pin--active');
+    }
+    newElement.classList.add('map__pin--active');
+
+    var popup = document.querySelector('.popup');
+    if (popup) {
+      popup.remove();
+    }
+    displayPopup(advert);
+  }
+  newElement.addEventListener('keydown', function (event) {
+    if (event.keyCode === 13) {
+      onSelectPin();
+    }
+  });
+  newElement.addEventListener('click', onSelectPin);
   return newElement;
 }
+
 function displayAdvertsOnMap(arr) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
@@ -94,11 +112,11 @@ function displayAdvertsOnMap(arr) {
   mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
 }
 
-displayAdvertsOnMap(adverts);
+// displayAdvertsOnMap(adverts);
 
 var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
 
-function displayOneAdvertOnMap(advert) {
+function displayPopup(advert) {
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
 
   var mapCard = templateContent.querySelector('article.map__card').cloneNode(true); // достаем mapCard из templateContent и клонируем вместе с содержимым
@@ -120,7 +138,63 @@ function displayOneAdvertOnMap(advert) {
     featureLi.classList.add('feature', 'feature--' + feature); // добавляем созданному элементу нужный класс
     mapCard.querySelector('ul').appendChild(featureLi); // добавляем созданный элемент в список
   }
+  document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
 
-  mapCard = document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
+  // ???????????????????????????????????
+  function hidePopup() {
+    document.querySelector('.map__pin--active').classList.remove('map__pin--active');
+    document.querySelector('.popup').remove();
+    document.removeEventListener('keydown', onEscKeydown);
+  }
+
+  var onEscKeydown = function (event) {
+    if (event.keyCode === 27) {
+      hidePopup();
+    }
+  };
+
+  document.addEventListener('keydown', onEscKeydown);
+  document.querySelector('.popup__close').addEventListener('click', hidePopup);
+  // ???????????????????????????????????
 }
-displayOneAdvertOnMap(adverts[0]);
+
+// displayPopup(adverts[0]);
+
+
+var map = document.querySelector('.map');
+var userMapPin = document.querySelector('.map__pin--main');
+var noticeForm = document.querySelector('.notice__form');
+
+function showMain() {
+  displayAdvertsOnMap(adverts);
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+}
+
+userMapPin.addEventListener('keydown', function (event) {
+  if (event.keyCode === 13) {
+    showMain();
+  }
+});
+userMapPin.addEventListener('mouseup', showMain);
+
+
+/*
+
+
+ Вы добавляете обработчик клика внутри функции, которая создает DOM-элемент.
+ Внутри этой функции вам доступна вся информация об объекте размещения:
+
+ ```function generatePinElement(data) {
+ var pinElement = document.createElement('div');
+ …
+ pinElement.addEventListener('click', function(evt) {
+ // внутри этого обработчика вам доступна информация как о событии (evt)
+ // так и об объекте размещения (data)
+ showOfferDetails(data);
+ });
+ }```
+
+
+*/
+
