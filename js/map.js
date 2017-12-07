@@ -4,6 +4,18 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var HOUSE_TYPE = ['flat', 'house', 'bungalo'];
 var CHECK_IN = ['12:00', '13:00', '14:00'];
 var CHECK_OUT = ['12:00', '13:00', '14:00'];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var PIN_OFFSET_X = 20;
+var PIN_OFFSET_Y = 50;
+
+var onEscKeydown = function (event) {
+  if (event.keyCode === ESC_KEYCODE) {
+    deselectPinAndClosePopup();
+  }
+};
+
+document.addEventListener('keydown', onEscKeydown);
 
 
 // возвращает случайное число элементов массива
@@ -72,28 +84,31 @@ function generateObjects(num) { // определённое кол-во раз �
   return result;
 }
 
+function deselectPinAndClosePopup() {
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
+  }
+  var popup = document.querySelector('.popup');
+  if (popup) {
+    popup.remove();
+  }
+}
+
 // функция показывает дом-элементы на карте
 function createPinElement(advert) {
   var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
   newElement.className = 'map__pin'; // задаем класс элемента
-  newElement.style = 'left:' + (advert.location.x - 20) + 'px; top:' + (advert.location.y - 50) + 'px;';
+  newElement.style = 'left:' + (advert.location.x - PIN_OFFSET_X) + 'px; top:' + (advert.location.y - PIN_OFFSET_Y) + 'px;';
   newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
 
   function onSelectPin() {
-    var activePin = document.querySelector('.map__pin--active');
-    if (activePin) {
-      activePin.classList.remove('map__pin--active');
-    }
+    deselectPinAndClosePopup();
     newElement.classList.add('map__pin--active');
-
-    var popup = document.querySelector('.popup');
-    if (popup) {
-      popup.remove();
-    }
     displayPopup(advert);
   }
   newElement.addEventListener('keydown', function (event) {
-    if (event.keyCode === 13) {
+    if (event.keyCode === ENTER_KEYCODE) {
       onSelectPin();
     }
   });
@@ -139,27 +154,8 @@ function displayPopup(advert) {
     mapCard.querySelector('ul').appendChild(featureLi); // добавляем созданный элемент в список
   }
   document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
-
-  // ???????????????????????????????????
-  function hidePopup() {
-    document.querySelector('.map__pin--active').classList.remove('map__pin--active');
-    document.querySelector('.popup').remove();
-    document.removeEventListener('keydown', onEscKeydown);
-  }
-
-  var onEscKeydown = function (event) {
-    if (event.keyCode === 27) {
-      hidePopup();
-    }
-  };
-
-  document.addEventListener('keydown', onEscKeydown);
-  document.querySelector('.popup__close').addEventListener('click', hidePopup);
-  // ???????????????????????????????????
+  document.querySelector('.popup__close').addEventListener('click', deselectPinAndClosePopup);
 }
-
-// displayPopup(adverts[0]);
-
 
 var map = document.querySelector('.map');
 var userMapPin = document.querySelector('.map__pin--main');
@@ -172,29 +168,8 @@ function showMain() {
 }
 
 userMapPin.addEventListener('keydown', function (event) {
-  if (event.keyCode === 13) {
+  if (event.keyCode === ENTER_KEYCODE) {
     showMain();
   }
 });
 userMapPin.addEventListener('mouseup', showMain);
-
-
-/*
-
-
- Вы добавляете обработчик клика внутри функции, которая создает DOM-элемент.
- Внутри этой функции вам доступна вся информация об объекте размещения:
-
- ```function generatePinElement(data) {
- var pinElement = document.createElement('div');
- …
- pinElement.addEventListener('click', function(evt) {
- // внутри этого обработчика вам доступна информация как о событии (evt)
- // так и об объекте размещения (data)
- showOfferDetails(data);
- });
- }```
-
-
-*/
-
