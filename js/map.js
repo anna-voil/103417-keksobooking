@@ -127,8 +127,6 @@ function displayAdvertsOnMap(arr) {
   mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
 }
 
-// displayAdvertsOnMap(adverts);
-
 var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
 
 function displayPopup(advert) {
