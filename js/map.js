@@ -4,6 +4,18 @@ var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditio
 var HOUSE_TYPE = ['flat', 'house', 'bungalo'];
 var CHECK_IN = ['12:00', '13:00', '14:00'];
 var CHECK_OUT = ['12:00', '13:00', '14:00'];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+var PIN_OFFSET_X = 20;
+var PIN_OFFSET_Y = 50;
+
+var onEscKeydown = function (event) {
+  if (event.keyCode === ESC_KEYCODE) {
+    deselectPinAndClosePopup();
+  }
+};
+
+document.addEventListener('keydown', onEscKeydown);
 
 
 // возвращает случайное число элементов массива
@@ -72,17 +84,38 @@ function generateObjects(num) { // определённое кол-во раз �
   return result;
 }
 
-// удаляем класс .map--faded из элемента .map
-document.querySelector('.map').classList.remove('map--faded');
+function deselectPinAndClosePopup() {
+  var activePin = document.querySelector('.map__pin--active');
+  if (activePin) {
+    activePin.classList.remove('map__pin--active');
+  }
+  var popup = document.querySelector('.popup');
+  if (popup) {
+    popup.remove();
+  }
+}
 
 // функция показывает дом-элементы на карте
 function createPinElement(advert) {
   var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
   newElement.className = 'map__pin'; // задаем класс элемента
-  newElement.style = 'left:' + (advert.location.x - 20) + 'px; top:' + (advert.location.y - 50) + 'px;';
+  newElement.style = 'left:' + (advert.location.x - PIN_OFFSET_X) + 'px; top:' + (advert.location.y - PIN_OFFSET_Y) + 'px;';
   newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
+
+  function onSelectPin() {
+    deselectPinAndClosePopup();
+    newElement.classList.add('map__pin--active');
+    displayPopup(advert);
+  }
+  newElement.addEventListener('keydown', function (event) {
+    if (event.keyCode === ENTER_KEYCODE) {
+      onSelectPin();
+    }
+  });
+  newElement.addEventListener('click', onSelectPin);
   return newElement;
 }
+
 function displayAdvertsOnMap(arr) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
@@ -94,11 +127,9 @@ function displayAdvertsOnMap(arr) {
   mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
 }
 
-displayAdvertsOnMap(adverts);
-
 var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
 
-function displayOneAdvertOnMap(advert) {
+function displayPopup(advert) {
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
 
   var mapCard = templateContent.querySelector('article.map__card').cloneNode(true); // достаем mapCard из templateContent и клонируем вместе с содержимым
@@ -120,7 +151,23 @@ function displayOneAdvertOnMap(advert) {
     featureLi.classList.add('feature', 'feature--' + feature); // добавляем созданному элементу нужный класс
     mapCard.querySelector('ul').appendChild(featureLi); // добавляем созданный элемент в список
   }
-
-  mapCard = document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
+  document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
+  document.querySelector('.popup__close').addEventListener('click', deselectPinAndClosePopup);
 }
-displayOneAdvertOnMap(adverts[0]);
+
+var map = document.querySelector('.map');
+var userMapPin = document.querySelector('.map__pin--main');
+var noticeForm = document.querySelector('.notice__form');
+
+function showMain() {
+  displayAdvertsOnMap(adverts);
+  map.classList.remove('map--faded');
+  noticeForm.classList.remove('notice__form--disabled');
+}
+
+userMapPin.addEventListener('keydown', function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    showMain();
+  }
+});
+userMapPin.addEventListener('mouseup', showMain);
