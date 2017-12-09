@@ -1,7 +1,7 @@
 'use strict';
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var HOUSE_TYPE = ['flat', 'house', 'bungalo'];
+var HOUSE_TYPE = ['flat', 'house', 'bungalo', 'palace'];
 var CHECK_IN = ['12:00', '13:00', '14:00'];
 var CHECK_OUT = ['12:00', '13:00', '14:00'];
 var ESC_KEYCODE = 27;
@@ -127,7 +127,7 @@ function displayAdvertsOnMap(arr) {
   mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
 }
 
-var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Бунгало'}; // создаем словарик для типов жилья offer.type
+var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Лачуга', 'palace': 'Дворец'}; // создаем словарик для типов жилья offer.type
 
 function displayPopup(advert) {
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
@@ -171,3 +171,25 @@ userMapPin.addEventListener('keydown', function (event) {
   }
 });
 userMapPin.addEventListener('mouseup', showMain);
+
+document.querySelector('[name=timein]').addEventListener('change', function (event) {
+  var optionIndex = event.target.selectedIndex;
+  document.querySelector('[name=timeout]').selectedIndex = optionIndex;
+});
+
+var TYPES_PRICE_DICTIONARY = {'flat': '1000', 'house': '5000', 'bungalo': '0', 'palace': '10000'};
+
+
+var typeElement = document.querySelector('[name=type]');
+typeElement.addEventListener('change', function () {
+  var price = TYPES_PRICE_DICTIONARY[typeElement.value];
+  document.querySelector('[name=price]').value = price;
+});
+
+var ROOMS_DICTIONARY = {'1': '1', '2': '2', '3': '3', '100': '0'};
+
+var ROOMS_ELEMENT = document.querySelector('[name=rooms]');
+var GUESTS_ELEMENT = document.querySelector('[name=capacity]');
+ROOMS_ELEMENT.addEventListener('change', function () {
+  GUESTS_ELEMENT.value = ROOMS_DICTIONARY[ROOMS_ELEMENT.value];
+});
