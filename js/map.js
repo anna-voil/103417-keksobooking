@@ -29,5 +29,4 @@ window.map = (function () {
     window.pin.deselectActivePin();
     window.card.closePopup();
   };
-  return {};
 }());

@@ -32,11 +32,7 @@ window.form = (function () {
     onChange(); // синхронизация сразу при загрузке страницы
   }
   synchronizeInputs(ROOMS_ELEMENT, ROOMS_ORDER, GUESTS_ELEMENT, GUESTS_ORDER);
-
   synchronizeInputs(CHECK_IN_ELEMENT, window.data.CHECK_IN, CHECK_OUT_ELEMENT, window.data.CHECK_OUT);
   synchronizeInputs(CHECK_OUT_ELEMENT, window.data.CHECK_OUT, CHECK_IN_ELEMENT, window.data.CHECK_IN);
-
   synchronizeInputs(TYPE_ELEMENT, TYPE_ORDER, PRICE_ELEMENT, MIN_PRICE_ORDER, setMin);
-
-  return {};
 }());

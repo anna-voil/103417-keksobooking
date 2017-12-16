@@ -10,7 +10,7 @@ window.card = (function () {
     // далее помещаем данные в шаблон контент template:
     mapCard.querySelector('h3').textContent = advert.offer.title; // в templateContent находим элемент h3 и помещаем в него title
     mapCard.querySelector('p small').textContent = advert.offer.address;
-    mapCard.querySelector('.popup__price').innerHTML = advert.offer.price + ' &#x20bd;/ночь'; // textContent не используем тк не отображает символ рубля
+    mapCard.querySelector('.popup__price').textContent = advert.offer.price + ' \u20bd/ночь'; // textContent не используем тк не отображает символ рубля
     mapCard.querySelector('h4').textContent = TYPES_DICTIONARY[advert.offer.type]; // обращаемся к св-ву словаря через [], чтобы вывести альтернативное название типа жилья
     mapCard.querySelectorAll('p')[2].textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей'; // находим <p> по порядковому номеру
     mapCard.querySelectorAll('p')[3].textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;

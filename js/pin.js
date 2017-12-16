@@ -14,8 +14,16 @@ window.pin = (function () {
   function createPinElement(advert) {
     var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
     newElement.className = 'map__pin'; // задаем класс элемента
-    newElement.style = 'left:' + (advert.location.x - PIN_OFFSET_X) + 'px; top:' + (advert.location.y - PIN_OFFSET_Y) + 'px;';
-    newElement.innerHTML = '<img src="' + advert.author.avatar + '" width="40" height="40" draggable="false">';
+    newElement.style.left = (advert.location.x - PIN_OFFSET_X) + 'px';
+    newElement.style.top = (advert.location.y - PIN_OFFSET_Y) + 'px';
+
+    var pinImg = document.createElement('img');
+    pinImg.src = advert.author.avatar;
+    pinImg.width = 40;
+    pinImg.height = 40;
+    pinImg.draggable = false;
+
+    newElement.appendChild(pinImg);
 
     var onSelectPin = function () {
       deselectActivePin();
@@ -43,9 +51,9 @@ window.pin = (function () {
     mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
   };
 
-  var USER_PIN = document.querySelector('button.map__pin--main');
+  var userPin = document.querySelector('button.map__pin--main');
 
-  USER_PIN.addEventListener('mousedown', function (evt) {
+  userPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -66,8 +74,8 @@ window.pin = (function () {
         y: moveEvt.clientY
       };
 
-      USER_PIN.style.top = (USER_PIN.offsetTop - shift.y) + 'px';
-      USER_PIN.style.left = (USER_PIN.offsetLeft - shift.x) + 'px';
+      userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
+      userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
     };
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
