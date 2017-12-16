@@ -35,4 +35,9 @@ window.form = (function () {
   synchronizeInputs(CHECK_IN_ELEMENT, window.data.CHECK_IN, CHECK_OUT_ELEMENT, window.data.CHECK_OUT);
   synchronizeInputs(CHECK_OUT_ELEMENT, window.data.CHECK_OUT, CHECK_IN_ELEMENT, window.data.CHECK_IN);
   synchronizeInputs(TYPE_ELEMENT, TYPE_ORDER, PRICE_ELEMENT, MIN_PRICE_ORDER, setMin);
+
+  window.pin.createUserPin(function (x, y) {
+    document.querySelector('[name=address]').value = x + ', ' + y;
+  });
+
 }());

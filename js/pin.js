@@ -2,6 +2,8 @@
 window.pin = (function () {
   var PIN_OFFSET_X = 20;
   var PIN_OFFSET_Y = 50;
+  var AVATAR_WIDTH = 40;
+  var AVATAR_HEIGHT = 40;
 
   var deselectActivePin = function () {
     var activePin = document.querySelector('.map__pin--active');
@@ -19,8 +21,8 @@ window.pin = (function () {
 
     var pinImg = document.createElement('img');
     pinImg.src = advert.author.avatar;
-    pinImg.width = 40;
-    pinImg.height = 40;
+    pinImg.width = AVATAR_WIDTH;
+    pinImg.height = AVATAR_HEIGHT;
     pinImg.draggable = false;
 
     newElement.appendChild(pinImg);
@@ -51,42 +53,47 @@ window.pin = (function () {
     mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
   };
 
-  var userPin = document.querySelector('button.map__pin--main');
+  var createUserPin = function (onChangePosition) {
+    var userPin = document.querySelector('button.map__pin--main');
 
-  userPin.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+    userPin.addEventListener('mousedown', function (evt) {
+      evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+      var startCoords = {
+        x: evt.clientX,
+        y: evt.clientY
       };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
+      var onMouseMove = function (moveEvt) {
+        moveEvt.preventDefault();
+
+        var shift = {
+          x: startCoords.x - moveEvt.clientX,
+          y: startCoords.y - moveEvt.clientY
+        };
+
+        startCoords = {
+          x: moveEvt.clientX,
+          y: moveEvt.clientY
+        };
+
+        userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
+        userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
+      };
+      var onMouseUp = function (upEvt) {
+        upEvt.preventDefault();
+
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+
+        onChangePosition(upEvt.clientX, upEvt.clientY);
       };
 
-      userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
-      userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
-    };
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  };
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-
-  return {deselectActivePin: deselectActivePin, displayAdvertsOnMap: displayAdvertsOnMap};
+  return {deselectActivePin: deselectActivePin, displayAdvertsOnMap: displayAdvertsOnMap, createUserPin: createUserPin};
 }());
