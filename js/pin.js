@@ -64,6 +64,10 @@ window.pin = (function () {
         y: evt.clientY
       };
 
+      var startOffset = {
+        x: userPin.offsetLeft,
+        y: userPin.offsetTop
+      };
       var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
 
@@ -72,14 +76,9 @@ window.pin = (function () {
           y: startCoords.y - moveEvt.clientY
         };
 
-        startCoords = {
-          x: moveEvt.clientX,
-          y: moveEvt.clientY
-        };
-
         var userCoords = {
-          x: userPin.offsetLeft - shift.x,
-          y: userPin.offsetTop - shift.y
+          x: startOffset.x - shift.x,
+          y: startOffset.y - shift.y
         };
         var mapLimits = window.map.mapLimits;
         userCoords = {
