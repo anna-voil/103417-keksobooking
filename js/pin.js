@@ -77,23 +77,31 @@ window.pin = (function () {
           y: moveEvt.clientY
         };
 
-        userPin.style.top = (userPin.offsetTop - shift.y) + 'px';
-        userPin.style.left = (userPin.offsetLeft - shift.x) + 'px';
+        var userCoords = {
+          x: userPin.offsetLeft - shift.x,
+          y: userPin.offsetTop - shift.y
+        };
+        var mapLimits = window.map.mapLimits;
+        userCoords = {
+          x: Math.min(mapLimits.maxX, Math.max(mapLimits.minX, userCoords.x)),
+          y: Math.min(mapLimits.maxY, Math.max(mapLimits.minY, userCoords.y))
+        };
+
+        userPin.style.top = (userCoords.y) + 'px';
+        userPin.style.left = (userCoords.x) + 'px';
+
+        onChangePosition(userCoords.x, userCoords.y);
       };
       var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
 
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
-
-        onChangePosition(upEvt.clientX, upEvt.clientY);
       };
 
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
     });
   };
-
-
   return {deselectActivePin: deselectActivePin, displayAdvertsOnMap: displayAdvertsOnMap, createUserPin: createUserPin};
 }());
