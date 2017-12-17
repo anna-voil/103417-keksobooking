@@ -30,11 +30,11 @@ window.map = (function () {
     window.card.closePopup();
   };
 
-  var mapLimits = {
+  var MAP_LIMITS = {
     minX: 0,
     maxX: map.clientWidth,
     minY: 100,
     maxY: 500
   };
-  return {mapLimits: mapLimits};
+  return {MAP_LIMITS: MAP_LIMITS};
 }());

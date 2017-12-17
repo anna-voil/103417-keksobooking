@@ -80,14 +80,14 @@ window.pin = (function () {
           x: startOffset.x - shift.x,
           y: startOffset.y - shift.y
         };
-        var mapLimits = window.map.mapLimits;
+        var mapLimits = window.map.MAP_LIMITS;
         userCoords = {
           x: Math.min(mapLimits.maxX, Math.max(mapLimits.minX, userCoords.x)),
           y: Math.min(mapLimits.maxY, Math.max(mapLimits.minY, userCoords.y))
         };
 
-        userPin.style.top = (userCoords.y) + 'px';
-        userPin.style.left = (userCoords.x) + 'px';
+        userPin.style.top = userCoords.y + 'px';
+        userPin.style.left = userCoords.x + 'px';
 
         onChangePosition(userCoords.x, userCoords.y);
       };
