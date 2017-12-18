@@ -30,7 +30,7 @@ window.pin = (function () {
     var onSelectPin = function () {
       deselectActivePin();
       newElement.classList.add('map__pin--active');
-      window.card.displayPopup(advert);
+      window.showCard(advert);
     };
     newElement.addEventListener('keydown', function (event) {
       if (event.keyCode === window.data.ENTER_KEYCODE) {

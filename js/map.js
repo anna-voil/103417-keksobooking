@@ -3,7 +3,7 @@ window.map = (function () {
 
   var onEscKeydown = function (event) {
     if (event.keyCode === window.data.ESC_KEYCODE) {
-      deselectPinAndClosePopup();
+      window.pin.deselectActivePin();
     }
   };
   document.addEventListener('keydown', onEscKeydown);
@@ -24,11 +24,6 @@ window.map = (function () {
     }
   });
   userMapPinMain.addEventListener('mouseup', showMain);
-
-  var deselectPinAndClosePopup = function () {
-    window.pin.deselectActivePin();
-    window.card.closePopup();
-  };
 
   var MAP_LIMITS = {
     minX: 0,
