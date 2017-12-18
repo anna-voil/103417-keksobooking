@@ -29,4 +29,12 @@ window.map = (function () {
     window.pin.deselectActivePin();
     window.card.closePopup();
   };
+
+  var MAP_LIMITS = {
+    minX: 0,
+    maxX: map.clientWidth,
+    minY: 100,
+    maxY: 500
+  };
+  return {MAP_LIMITS: MAP_LIMITS};
 }());

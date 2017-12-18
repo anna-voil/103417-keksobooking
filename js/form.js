@@ -37,7 +37,7 @@ window.form = (function () {
   synchronizeInputs(TYPE_ELEMENT, TYPE_ORDER, PRICE_ELEMENT, MIN_PRICE_ORDER, setMin);
 
   window.pin.createUserPin(function (x, y) {
-    document.querySelector('[name=address]').value = x + ', ' + y;
+    document.querySelector('[name=address]').value = 'x: ' + x + ', y: ' + y;
   });
 
 }());
