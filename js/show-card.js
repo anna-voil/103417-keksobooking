@@ -1,5 +1,5 @@
 'use strict';
-window.card = (function () {
+window.showCard = (function () {
   var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Лачуга', 'palace': 'Дворец'}; // создаем словарик для типов жилья offer.type
 
 
@@ -27,7 +27,6 @@ window.card = (function () {
     return mapCard;
   };
 
-
   var closePopup = function () {
     var popup = document.querySelector('.popup');
     if (popup) {
@@ -41,5 +40,13 @@ window.card = (function () {
     document.querySelector('.popup__close').addEventListener('click', closePopup);
   };
 
-  return {createPopup: createPopup, displayPopup: displayPopup, closePopup: closePopup};
+
+  var onEscKeydown = function (event) {
+    if (event.keyCode === window.data.ESC_KEYCODE) {
+      closePopup();
+    }
+  };
+  document.addEventListener('keydown', onEscKeydown);
+
+  return displayPopup;
 }());
