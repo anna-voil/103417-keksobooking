@@ -847,3 +847,45 @@ textarea:focus
 {
     background-position: -10px -10px;
 }
+
+.notification
+{
+    position: fixed;
+    top: calc(50% - 150px);
+    left: calc(50% - 250px);
+    width: 500px;
+    height: 300px;
+    background: #ffffff;
+    border-radius: 10px;
+    z-index: 3;
+}
+
+.notification--error
+{
+    border: solid 2px #ff5635;
+    box-shadow: 0 0 20px 10px rgba(255, 86, 53, .7);
+}
+
+.notification--success
+{
+    border: solid 2px #70b020;
+    box-shadow: 0 0 20px 10px rgba(112, 176, 32, .7);
+}
+
+.notification__close
+{
+    position: absolute;
+    top: -50px;
+    right: 0;
+    cursor: pointer;
+    font-size: 45px;
+    color: #000000;
+    border: 0;
+    background: none;
+}
+
+.notification__text
+{
+    text-align: left;
+    margin: 50px;
+}

@@ -12,8 +12,15 @@ window.map = (function () {
   var userMapPinMain = document.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
 
+
+  var onLoad = function (adverts) {
+    window.pin.displayAdvertsOnMap(adverts);
+  };
+
   function showMain() {
-    window.pin.displayAdvertsOnMap(window.data.adverts);
+    window.backend.load(onLoad, window.notification.error);
+
+    // window.pin.displayAdvertsOnMap(window.data.adverts);
     map.classList.remove('map--faded');
     noticeForm.classList.remove('notice__form--disabled');
   }

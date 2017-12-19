@@ -14,6 +14,8 @@
   var PRICE_ELEMENT = document.querySelector('[name=price]');
   var MIN_PRICE_ORDER = ['1000', '5000', '0', '10000'];
 
+  var USER_FORM = document.querySelector('.notice__form');
+
 
   function setMin(element, value) {
     element.min = value;
@@ -26,5 +28,15 @@
 
   window.pin.createUserPin(function (x, y) {
     document.querySelector('[name=address]').value = 'x: ' + x + ', y: ' + y;
+  });
+
+  var onLoad = function () {
+    window.notification.success('Ваше объявление успешно добавлено!');
+    USER_FORM.reset();
+  };
+
+  USER_FORM.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(USER_FORM), onLoad, window.notification.error);
+    evt.preventDefault();
   });
 }());
