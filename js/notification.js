@@ -14,7 +14,7 @@ window.notification = (function () {
   var showNotification = function (message, isSuccess) {
     var notification = templateContent.querySelector('article.notification').cloneNode(true); // достаем notification из templateContent
     notification.querySelector('.notification__text').textContent = message;
-    notification.classList.add(isSuccess ? 'notification--success' : 'notification--error');
+    notification.classList.add('notification--' + (isSuccess ? 'success' : 'error'));
     document.querySelector('body').appendChild(notification);
     notification.querySelector('.notification__close').addEventListener('click', closeNotification);
   };

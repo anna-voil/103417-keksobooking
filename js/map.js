@@ -20,7 +20,6 @@ window.map = (function () {
   function showMain() {
     window.backend.load(onLoad, window.notification.error);
 
-    // window.pin.displayAdvertsOnMap(window.data.adverts);
     map.classList.remove('map--faded');
     noticeForm.classList.remove('notice__form--disabled');
   }
