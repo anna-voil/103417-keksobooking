@@ -41,7 +41,6 @@ window.pin = (function () {
     return newElement;
   }
 
-
   var displayAdvertsOnMap = function (arr) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
