@@ -2,9 +2,6 @@
 window.backend = (function () {
   var LOAD_URL = 'https://1510.dump.academy/keksobooking/data';
   var SAVE_URL = 'https://1510.dump.academy/keksobooking';
-
-
-
   var createXHR = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';

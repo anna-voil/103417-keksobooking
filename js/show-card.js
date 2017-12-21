@@ -2,7 +2,6 @@
 window.showCard = (function () {
   var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Лачуга', 'palace': 'Дворец'}; // создаем словарик для типов жилья offer.type
 
-
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
   var mapCard = templateContent.querySelector('article.map__card').cloneNode(true); // достаем mapCard из templateContent и клонируем вместе с содержимым
 
@@ -39,7 +38,6 @@ window.showCard = (function () {
     document.querySelector('.map').insertBefore(mapCard, document.querySelector('.map__filters-container')); // вставляет переменную mapCard в блок .map перед блоком .map__filters-container
     document.querySelector('.popup__close').addEventListener('click', closePopup);
   };
-
 
   var onEscKeydown = function (event) {
     if (event.keyCode === window.data.ESC_KEYCODE) {

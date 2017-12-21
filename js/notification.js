@@ -8,7 +8,6 @@ window.notification = (function () {
     }
   };
 
-
   var templateContent = document.querySelector('template').content; // достаем контент template
 
   var showNotification = function (message, isSuccess) {

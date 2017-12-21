@@ -12,7 +12,6 @@ window.map = (function () {
   var userMapPinMain = document.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
 
-
   var onLoad = function (adverts) {
     window.pin.displayAdvertsOnMap(adverts);
   };
