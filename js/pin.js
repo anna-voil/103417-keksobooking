@@ -1,5 +1,5 @@
 'use strict';
-window.pin = (function () {
+(function () {
   var PIN_OFFSET_X = 20;
   var PIN_OFFSET_Y = 50;
   var AVATAR_WIDTH = 40;
@@ -13,19 +13,19 @@ window.pin = (function () {
   };
 
   // функция показывает дом-элементы на карте
-  function createPinElement(advert) {
+  var createPinElement = function (advert) {
     var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
     newElement.className = 'map__pin'; // задаем класс элемента
     newElement.style.left = (advert.location.x - PIN_OFFSET_X) + 'px';
     newElement.style.top = (advert.location.y - PIN_OFFSET_Y) + 'px';
 
-    var pinImg = document.createElement('img');
-    pinImg.src = advert.author.avatar;
-    pinImg.width = AVATAR_WIDTH;
-    pinImg.height = AVATAR_HEIGHT;
-    pinImg.draggable = false;
+    var pinImgElement = document.createElement('img');
+    pinImgElement.src = advert.author.avatar;
+    pinImgElement.width = AVATAR_WIDTH;
+    pinImgElement.height = AVATAR_HEIGHT;
+    pinImgElement.draggable = false;
 
-    newElement.appendChild(pinImg);
+    newElement.appendChild(pinImgElement);
 
     var onSelectPin = function () {
       deselectActivePin();
@@ -33,28 +33,28 @@ window.pin = (function () {
       window.showCard(advert);
     };
     newElement.addEventListener('keydown', function (event) {
-      if (event.keyCode === window.data.ENTER_KEYCODE) {
+      if (event.keyCode === window.utils.ENTER_KEYCODE) {
         onSelectPin();
       }
     });
     newElement.addEventListener('click', onSelectPin);
     return newElement;
-  }
+  };
 
-  var displayAdvertsOnMap = function (arr) {
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)'); // находим пины, которые нужно удалить (все кроме userPin)
-    for (var j = 0; j < allPins.length; j++) {
-      allPins[j].remove();
+  var mapPinsElement = document.querySelector('.map__pins'); // находим элемент с классом map__pins
+  var displayAdvertsOnMap = function (offers) {
+    var allPinElements = document.querySelectorAll('.map__pin:not(.map__pin--main)'); // находим пины, которые нужно удалить (все кроме userPin)
+    for (var j = 0; j < allPinElements.length; j++) {
+      allPinElements[j].remove();
     }
 
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
-      var advert = arr[i];
+    for (var i = 0; i < offers.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
+      var advert = offers[i];
       var newElement = createPinElement(advert);
       fragment.appendChild(newElement); // добавляем элемент в var fragment
     }
-    var mapPins = document.querySelector('.map__pins'); // находим элемент с классом map__pins
-    mapPins.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
+    mapPinsElement.appendChild(fragment); // добавляем в элемент с классом map__pins элемент fragment, внутри которого находятся дом-элементы, соответствующие объявлениям
   };
 
   var createUserPin = function (onChangePosition) {
@@ -86,8 +86,8 @@ window.pin = (function () {
         };
         var mapLimits = window.map.MAP_LIMITS;
         userCoords = {
-          x: Math.min(mapLimits.maxX, Math.max(mapLimits.minX, userCoords.x)),
-          y: Math.min(mapLimits.maxY, Math.max(mapLimits.minY, userCoords.y))
+          x: Math.min(mapLimits.MAX_X, Math.max(mapLimits.MIN_X, userCoords.x)),
+          y: Math.min(mapLimits.MAX_Y, Math.max(mapLimits.MIN_Y, userCoords.y))
         };
 
         userPin.style.top = userCoords.y + 'px';
@@ -106,5 +106,5 @@ window.pin = (function () {
       document.addEventListener('mouseup', onMouseUp);
     });
   };
-  return {deselectActivePin: deselectActivePin, displayAdvertsOnMap: displayAdvertsOnMap, createUserPin: createUserPin};
+  window.pin = {deselectActivePin: deselectActivePin, displayAdvertsOnMap: displayAdvertsOnMap, createUserPin: createUserPin};
 }());

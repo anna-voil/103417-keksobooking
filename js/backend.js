@@ -1,5 +1,5 @@
 'use strict';
-window.backend = (function () {
+(function () {
   var LOAD_URL = 'https://1510.dump.academy/keksobooking/data';
   var SAVE_URL = 'https://1510.dump.academy/keksobooking';
 
@@ -33,5 +33,5 @@ window.backend = (function () {
     xhr.open('POST', SAVE_URL);
     xhr.send(data);
   };
-  return {load: load, save: save};
+  window.backend = {load: load, save: save};
 }());

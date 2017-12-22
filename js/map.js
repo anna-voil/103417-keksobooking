@@ -1,19 +1,23 @@
 'use strict';
-window.map = (function () {
+(function () {
+  var MAP_LIMITS = {
+    MIN_X: 0,
+    MAX_X: 1200,
+    MIN_Y: 100,
+    MAX_Y: 500
+  };
 
   var allAdverts = []; // массив, фильтрация
 
-
   var onEscKeydown = function (event) {
-    if (event.keyCode === window.data.ESC_KEYCODE) {
+    if (event.keyCode === window.utils.ESC_KEYCODE) {
       window.pin.deselectActivePin();
     }
   };
   document.addEventListener('keydown', onEscKeydown);
 
-  var map = document.querySelector('.map');
-  var userMapPinMain = document.querySelector('.map__pin--main');
-  var noticeForm = document.querySelector('.notice__form');
+  var userMapPinMainElement = document.querySelector('.map__pin--main');
+  var noticeFormElement = document.querySelector('.notice__form');
 
   var updatePins = function () { // удаление и отрисовка пинов при фильтрации
     var filteredAdverts = window.filters.filterAdverts(allAdverts);
@@ -25,25 +29,20 @@ window.map = (function () {
     updatePins();
   };
 
-  function showMain() {
-    window.backend.load(onLoad, window.notification.error);
+  var mapElement = document.querySelector('.map');
+  var showMain = function () {
+    window.backend.load(onLoad, window.notification.showErrorNotify);
 
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
-  }
+    mapElement.classList.remove('map--faded');
+    noticeFormElement.classList.remove('notice__form--disabled');
+  };
 
-  userMapPinMain.addEventListener('keydown', function (event) {
-    if (event.keyCode === window.data.ENTER_KEYCODE) {
+  userMapPinMainElement.addEventListener('keydown', function (event) {
+    if (event.keyCode === window.utils.ENTER_KEYCODE) {
       showMain();
     }
   });
-  userMapPinMain.addEventListener('mouseup', showMain);
+  userMapPinMainElement.addEventListener('mouseup', showMain);
 
-  var MAP_LIMITS = {
-    minX: 0,
-    maxX: map.clientWidth,
-    minY: 100,
-    maxY: 500
-  };
-  return {MAP_LIMITS: MAP_LIMITS, updatePins: updatePins};
+  window.map = {MAP_LIMITS: MAP_LIMITS, updatePins: updatePins};
 }());
