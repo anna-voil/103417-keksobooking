@@ -42,6 +42,11 @@ window.pin = (function () {
   }
 
   var displayAdvertsOnMap = function (arr) {
+    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)'); // находим пины, которые нужно удалить (все кроме userPin)
+    for (var j = 0; j < allPins.length; j++) {
+      allPins[j].remove();
+    }
+
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < arr.length; i++) { // проходим циклом по массиву для отрисовки его элементов в виде дом-объектов
       var advert = arr[i];
