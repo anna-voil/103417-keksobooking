@@ -1,12 +1,12 @@
 'use strict';
 (function () {
-  var mapElement = document.querySelector('.map');
   var MAP_LIMITS = {
     MIN_X: 0,
-    MAX_X: mapElement.clientWidth,
+    MAX_X: 1200,
     MIN_Y: 100,
     MAX_Y: 500
   };
+
   var allAdverts = []; // массив, фильтрация
 
   var onEscKeydown = function (event) {
@@ -29,6 +29,7 @@
     updatePins();
   };
 
+  var mapElement = document.querySelector('.map');
   var showMain = function () {
     window.backend.load(onLoad, window.notification.showErrorNotify);
 
