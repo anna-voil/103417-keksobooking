@@ -1,6 +1,9 @@
 'use strict';
 window.map = (function () {
 
+  var allAdverts = []; // массив, фильтрация
+
+
   var onEscKeydown = function (event) {
     if (event.keyCode === window.data.ESC_KEYCODE) {
       window.pin.deselectActivePin();
@@ -12,8 +15,14 @@ window.map = (function () {
   var userMapPinMain = document.querySelector('.map__pin--main');
   var noticeForm = document.querySelector('.notice__form');
 
+  var updatePins = function () { // удаление и отрисовка пинов при фильтрации
+    var filteredAdverts = window.filters.filterAdverts(allAdverts);
+    window.pin.displayAdvertsOnMap(filteredAdverts);
+  };
+
   var onLoad = function (adverts) {
-    window.pin.displayAdvertsOnMap(adverts);
+    allAdverts = adverts;
+    updatePins();
   };
 
   function showMain() {
@@ -36,5 +45,5 @@ window.map = (function () {
     minY: 100,
     maxY: 500
   };
-  return {MAP_LIMITS: MAP_LIMITS};
+  return {MAP_LIMITS: MAP_LIMITS, updatePins: updatePins};
 }());
