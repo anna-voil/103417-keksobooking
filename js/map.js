@@ -11,9 +11,9 @@ window.map = (function () {
   };
   document.addEventListener('keydown', onEscKeydown);
 
-  var map = document.querySelector('.map');
-  var userMapPinMain = document.querySelector('.map__pin--main');
-  var noticeForm = document.querySelector('.notice__form');
+  var mapElement = document.querySelector('.map');
+  var userMapPinMainElement = document.querySelector('.map__pin--main');
+  var noticeFormElement = document.querySelector('.notice__form');
 
   var updatePins = function () { // удаление и отрисовка пинов при фильтрации
     var filteredAdverts = window.filters.filterAdverts(allAdverts);
@@ -25,23 +25,23 @@ window.map = (function () {
     updatePins();
   };
 
-  function showMain() {
-    window.backend.load(onLoad, window.notification.error);
+  var showMain = function () {
+    window.backend.load(onLoad, window.notification.showErrorNotify);
 
-    map.classList.remove('map--faded');
-    noticeForm.classList.remove('notice__form--disabled');
-  }
+    mapElement.classList.remove('map--faded');
+    noticeFormElement.classList.remove('notice__form--disabled');
+  };
 
-  userMapPinMain.addEventListener('keydown', function (event) {
+  userMapPinMainElement.addEventListener('keydown', function (event) {
     if (event.keyCode === window.data.ENTER_KEYCODE) {
       showMain();
     }
   });
-  userMapPinMain.addEventListener('mouseup', showMain);
+  userMapPinMainElement.addEventListener('mouseup', showMain);
 
   var MAP_LIMITS = {
     minX: 0,
-    maxX: map.clientWidth,
+    maxX: mapElement.clientWidth,
     minY: 100,
     maxY: 500
   };

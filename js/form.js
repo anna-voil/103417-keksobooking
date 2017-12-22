@@ -3,39 +3,41 @@
   var synchronizeFields = window.synchronizeFields;
   var roomsElement = document.querySelector('[name=rooms]');
   var guestsElement = document.querySelector('[name=capacity]');
-  var ROOMS_ORDER = ['1', '2', '3', '100'];
-  var GUESTS_ORDER = ['1', '2', '3', '0'];
+  var ROOMS_VALUES = ['1', '2', '3', '100'];
+  var GUESTS_VALUES = ['1', '2', '3', '0'];
 
   var checkInElement = document.querySelector('[name=timein]');
   var checkOutElement = document.querySelector('[name=timeout]');
 
   var typeElement = document.querySelector('[name=type]');
-  var TYPE_ORDER = window.data.HOUSE_TYPE;
+  var TYPES_VALUES = window.data.HOUSE_TYPE;
   var priceElement = document.querySelector('[name=price]');
-  var MIN_PRICE_ORDER = ['1000', '5000', '0', '10000'];
+  var MIN_PRICE_VALUES = ['1000', '5000', '0', '10000'];
+  var CHECK_IN_TIMES = ['12:00', '13:00', '14:00'];
+  var CHECK_OUT_TIMES = ['12:00', '13:00', '14:00'];
 
   var userForm = document.querySelector('.notice__form');
 
-  function setMin(element, value) {
+  var setMin = function (element, value) {
     element.min = value;
-  }
+  };
 
-  synchronizeFields(roomsElement, ROOMS_ORDER, guestsElement, GUESTS_ORDER);
-  synchronizeFields(checkInElement, window.data.CHECK_IN, checkOutElement, window.data.CHECK_OUT);
-  synchronizeFields(checkOutElement, window.data.CHECK_OUT, checkInElement, window.data.CHECK_IN);
-  synchronizeFields(typeElement, TYPE_ORDER, priceElement, MIN_PRICE_ORDER, setMin);
+  synchronizeFields(roomsElement, ROOMS_VALUES, guestsElement, GUESTS_VALUES);
+  synchronizeFields(checkInElement, CHECK_IN_TIMES, checkOutElement, CHECK_OUT_TIMES);
+  synchronizeFields(checkOutElement, CHECK_OUT_TIMES, checkInElement, CHECK_IN_TIMES);
+  synchronizeFields(typeElement, TYPES_VALUES, priceElement, MIN_PRICE_VALUES, setMin);
 
   window.pin.createUserPin(function (x, y) {
     document.querySelector('[name=address]').value = 'x: ' + x + ', y: ' + y;
   });
 
   var onLoad = function () {
-    window.notification.success('Ваше объявление успешно добавлено!');
+    window.notification.showSuccessNotify('Ваше объявление успешно добавлено!');
     userForm.reset();
   };
 
   userForm.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(userForm), onLoad, window.notification.error);
+    window.backend.save(new FormData(userForm), onLoad, window.notification.showErrorNotify);
     evt.preventDefault();
   });
 }());

@@ -13,19 +13,19 @@ window.pin = (function () {
   };
 
   // функция показывает дом-элементы на карте
-  function createPinElement(advert) {
+  var createPinElement = function (advert) {
     var newElement = document.createElement('button'); // создаём дом-элемент <button> (arr[i])
     newElement.className = 'map__pin'; // задаем класс элемента
     newElement.style.left = (advert.location.x - PIN_OFFSET_X) + 'px';
     newElement.style.top = (advert.location.y - PIN_OFFSET_Y) + 'px';
 
-    var pinImg = document.createElement('img');
-    pinImg.src = advert.author.avatar;
-    pinImg.width = AVATAR_WIDTH;
-    pinImg.height = AVATAR_HEIGHT;
-    pinImg.draggable = false;
+    var pinImgElement = document.createElement('img');
+    pinImgElement.src = advert.author.avatar;
+    pinImgElement.width = AVATAR_WIDTH;
+    pinImgElement.height = AVATAR_HEIGHT;
+    pinImgElement.draggable = false;
 
-    newElement.appendChild(pinImg);
+    newElement.appendChild(pinImgElement);
 
     var onSelectPin = function () {
       deselectActivePin();
@@ -39,7 +39,7 @@ window.pin = (function () {
     });
     newElement.addEventListener('click', onSelectPin);
     return newElement;
-  }
+  };
 
   var displayAdvertsOnMap = function (arr) {
     var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)'); // находим пины, которые нужно удалить (все кроме userPin)

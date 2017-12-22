@@ -27,6 +27,7 @@ window.showCard = (function () {
   };
 
   var closePopup = function () {
+    window.pin.deselectActivePin();
     var popup = document.querySelector('.popup');
     if (popup) {
       popup.remove();

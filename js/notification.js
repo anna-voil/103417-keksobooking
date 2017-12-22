@@ -2,9 +2,9 @@
 
 window.notification = (function () {
   var closeNotification = function () {
-    var notification = document.querySelector('article.notification');
-    if (notification) {
-      notification.remove();
+    var notificationElement = document.querySelector('article.notification');
+    if (notificationElement) {
+      notificationElement.remove();
     }
   };
 
@@ -18,12 +18,12 @@ window.notification = (function () {
     notification.querySelector('.notification__close').addEventListener('click', closeNotification);
   };
 
-  var success = function (message) {
+  var showSuccessNotify = function (message) {
     showNotification(message, true);
   };
 
-  var error = function (message) {
+  var showErrorNotify = function (message) {
     showNotification(message, false);
   };
-  return {success: success, error: error};
+  return {showSuccessNotify: showSuccessNotify, showErrorNotify: showErrorNotify};
 }());
