@@ -1,5 +1,5 @@
 'use strict';
-window.showCard = (function () {
+(function () {
   var TYPES_DICTIONARY = {'flat': 'Квартира', 'house': 'Дом', 'bungalo': 'Лачуга', 'palace': 'Дворец'}; // создаем словарик для типов жилья offer.type
 
   var templateContent = document.querySelector('template').content; // достаем контент template!!!
@@ -11,17 +11,20 @@ window.showCard = (function () {
     mapCard.querySelector('p small').textContent = advert.offer.address;
     mapCard.querySelector('.popup__price').textContent = advert.offer.price + ' \u20bd/ночь'; // textContent не используем тк не отображает символ рубля
     mapCard.querySelector('h4').textContent = TYPES_DICTIONARY[advert.offer.type]; // обращаемся к св-ву словаря через [], чтобы вывести альтернативное название типа жилья
-    mapCard.querySelectorAll('p')[2].textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей'; // находим <p> по порядковому номеру
-    mapCard.querySelectorAll('p')[3].textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
-    mapCard.querySelectorAll('p')[4].textContent = advert.offer.description;
+
+    var paragraphElements = mapCard.querySelectorAll('p');
+    paragraphElements[2].textContent = advert.offer.rooms + ' комнаты для ' + advert.offer.guests + ' гостей'; // находим <p> по порядковому номеру
+    paragraphElements[3].textContent = 'Заезд после ' + advert.offer.checkin + ', выезд до ' + advert.offer.checkout;
+    paragraphElements[4].textContent = advert.offer.description;
     mapCard.querySelector('.popup__avatar').src = advert.author.avatar;
 
     mapCard.querySelector('ul.popup__features').innerHTML = ''; // обращаемся к содержимому ul и удаляем, присвоив пустую строку
+    var ulElement = mapCard.querySelector('ul');
     for (var i = 0; i < advert.offer.features.length; i++) {
       var feature = advert.offer.features[i];
       var featureLi = document.createElement('li'); // создаем элемент li
       featureLi.classList.add('feature', 'feature--' + feature); // добавляем созданному элементу нужный класс
-      mapCard.querySelector('ul').appendChild(featureLi); // добавляем созданный элемент в список
+      ulElement.appendChild(featureLi); // добавляем созданный элемент в список
     }
     return mapCard;
   };
@@ -41,11 +44,11 @@ window.showCard = (function () {
   };
 
   var onEscKeydown = function (event) {
-    if (event.keyCode === window.data.ESC_KEYCODE) {
+    if (event.keyCode === window.utils.ESC_KEYCODE) {
       closePopup();
     }
   };
   document.addEventListener('keydown', onEscKeydown);
 
-  return displayPopup;
+  window.showCard = displayPopup;
 }());

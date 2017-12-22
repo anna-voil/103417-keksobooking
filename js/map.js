@@ -1,17 +1,21 @@
 'use strict';
-window.map = (function () {
-
+(function () {
+  var mapElement = document.querySelector('.map');
+  var MAP_LIMITS = {
+    MIN_X: 0,
+    MAX_X: mapElement.clientWidth,
+    MIN_Y: 100,
+    MAX_Y: 500
+  };
   var allAdverts = []; // массив, фильтрация
 
-
   var onEscKeydown = function (event) {
-    if (event.keyCode === window.data.ESC_KEYCODE) {
+    if (event.keyCode === window.utils.ESC_KEYCODE) {
       window.pin.deselectActivePin();
     }
   };
   document.addEventListener('keydown', onEscKeydown);
 
-  var mapElement = document.querySelector('.map');
   var userMapPinMainElement = document.querySelector('.map__pin--main');
   var noticeFormElement = document.querySelector('.notice__form');
 
@@ -33,17 +37,11 @@ window.map = (function () {
   };
 
   userMapPinMainElement.addEventListener('keydown', function (event) {
-    if (event.keyCode === window.data.ENTER_KEYCODE) {
+    if (event.keyCode === window.utils.ENTER_KEYCODE) {
       showMain();
     }
   });
   userMapPinMainElement.addEventListener('mouseup', showMain);
 
-  var MAP_LIMITS = {
-    minX: 0,
-    maxX: mapElement.clientWidth,
-    minY: 100,
-    maxY: 500
-  };
-  return {MAP_LIMITS: MAP_LIMITS, updatePins: updatePins};
+  window.map = {MAP_LIMITS: MAP_LIMITS, updatePins: updatePins};
 }());

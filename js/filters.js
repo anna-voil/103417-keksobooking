@@ -1,6 +1,9 @@
 'use strict';
 
-window.filters = (function () {
+(function () {
+  var MAX_PRICE = 50000;
+  var MIN_PRICE = 10000;
+  var ITEMS_LIMIT = 5;
   var housingTypeElement = document.querySelector('#housing-type');
   var housingPriceElement = document.querySelector('#housing-price');
   var housingRoomsElement = document.querySelector('#housing-rooms');
@@ -13,30 +16,32 @@ window.filters = (function () {
     window.debounce(window.map.updatePins);
   });
 
+  var isAny = function (element) {
+    return element.value === 'any';
+  };
+
   var checkType = function (advert) { // фильтрация типов жилья
-    return housingTypeElement.value === 'any' || housingTypeElement.value === advert.offer.type;
+    return isAny(housingTypeElement) || housingTypeElement.value === advert.offer.type;
   };
 
   var checkPrice = function (advert) { // фильтрация цен
     switch (housingPriceElement.value) {
-      case 'any':
-        return true;
       case 'middle':
-        return advert.offer.price > 10000 && advert.offer.price < 50000;
+        return advert.offer.price > MIN_PRICE && advert.offer.price < MAX_PRICE;
       case 'low':
-        return advert.offer.price < 10000;
+        return advert.offer.price < MIN_PRICE;
       case 'high':
-        return advert.offer.price > 50000;
+        return advert.offer.price > MAX_PRICE;
       default: return true;
     }
   };
 
   var checkRooms = function (advert) { // фильтрация по количеству комнат
-    return housingRoomsElement.value === 'any' || Number(housingRoomsElement.value) === advert.offer.rooms;
+    return isAny(housingRoomsElement) || Number(housingRoomsElement.value) === advert.offer.rooms;
   };
 
   var checkGuests = function (advert) { // фильтрация количества гостей
-    return housingGuestsElement.value === 'any' || Number(housingGuestsElement.value) === advert.offer.guests;
+    return isAny(housingGuestsElement) || Number(housingGuestsElement.value) === advert.offer.guests;
   };
 
   var checkFeatures = function (advert) {
@@ -53,9 +58,9 @@ window.filters = (function () {
   var filterAdverts = function (adverts) {
     return adverts.filter(function (advert) {
       return checkType(advert) && checkPrice(advert) && checkRooms(advert) && checkGuests(advert) && checkFeatures(advert);
-    }).slice(0, 5);
+    }).slice(0, ITEMS_LIMIT);
 
   };
 
-  return {filterAdverts: filterAdverts};
+  window.filters = {filterAdverts: filterAdverts};
 }());

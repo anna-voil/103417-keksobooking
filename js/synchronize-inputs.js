@@ -1,5 +1,5 @@
 'use strict';
-window.synchronizeFields = (function () {
+(function () {
   var setValue = function (element, value) { // устанавливает значение value элементу input
     element.value = value;
   };
@@ -13,5 +13,5 @@ window.synchronizeFields = (function () {
     element1.addEventListener('change', onChange); // синхронизация при изменении значения эл-та
     onChange(); // синхронизация сразу при загрузке страницы
   };
-  return synchronizeInputs;
+  window.synchronizeInputs = synchronizeInputs;
 })();
