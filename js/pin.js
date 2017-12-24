@@ -59,7 +59,7 @@
 
   var createUserPin = function (onChangePosition) {
     var userPin = document.querySelector('button.map__pin--main');
-
+    onChangePosition(userPin.offsetLeft, userPin.offsetTop);
     userPin.addEventListener('mousedown', function (evt) {
       evt.preventDefault();
 

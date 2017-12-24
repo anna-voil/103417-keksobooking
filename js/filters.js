@@ -27,11 +27,11 @@
   var checkPrice = function (advert) { // фильтрация цен
     switch (housingPriceElement.value) {
       case 'middle':
-        return advert.offer.price > MIN_PRICE && advert.offer.price < MAX_PRICE;
+        return advert.offer.price >= MIN_PRICE && advert.offer.price <= MAX_PRICE;
       case 'low':
-        return advert.offer.price < MIN_PRICE;
+        return advert.offer.price <= MIN_PRICE;
       case 'high':
-        return advert.offer.price > MAX_PRICE;
+        return advert.offer.price >= MAX_PRICE;
       default: return true;
     }
   };
